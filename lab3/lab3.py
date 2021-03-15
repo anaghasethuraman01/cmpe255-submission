@@ -14,8 +14,8 @@ class Detector:
         mpl.rc('xtick', labelsize=12)
         mpl.rc('ytick', labelsize=12)
         # Where to save the figures
-        PROJECT_ROOT_DIR = "."
-        IMAGE_DIR = "FIXME"
+        #PROJECT_ROOT_DIR = "."
+        #IMAGE_DIR = "FIXME"
        
         
 
@@ -44,8 +44,8 @@ class Detector:
         try:
             from sklearn.datasets import fetch_openml
             mnist = fetch_openml('mnist_784', version=1, cache=True)
-            mnist.target = mnist.target.astype(np.int8) # fetch_openml() returns targets as strings
-            #sort_by_target(mnist) # fetch_openml() returns an unsorted dataset
+            #mnist.target = mnist.target.astype(np.int8) # fetch_openml() returns targets as strings
+            #self.sort_by_target(mnist) # fetch_openml() returns an unsorted dataset
         except ImportError:
             from sklearn.datasets import fetch_mldata
             mnist = fetch_mldata('MNIST original')
@@ -77,7 +77,7 @@ class Detector:
         y_test_5 = (y_test == 5)
         
         # print prediction result of the given input some_digit
-        some_digit = X[36000]
+        #some_digit = X[36000]
         from sklearn.linear_model import SGDClassifier
         from sklearn.preprocessing import StandardScaler
         from sklearn.pipeline import make_pipeline
@@ -90,23 +90,25 @@ class Detector:
         
     def calculate_cross_val_score(self,sgd_clf,X_train,y_train_5):
         from sklearn.model_selection import cross_val_score
-        cross_val_score(sgd_clf, X_train, y_train_5, cv=3, scoring="accuracy")
-        
+        val=cross_val_score(sgd_clf, X_train, y_train_5, cv=3, scoring="accuracy")
+        print(val)
 
 if __name__ == "__main__":
     obj=Detector()
-    X, y = loadlocal_mnist(
-        images_path='train-images-idx3-ubyte', 
-        labels_path='train-labels-idx1-ubyte')
-    #print('Dimensions: %s x %s' % (X.shape[0], X.shape[1]))
-    #print('\n1st row', X[0])
-    #print('Digits:  0 1 2 3 4 5 6 7 8 9')
-    #print('labels: %s' % np.unique(y))
-    #print('Class distribution: %s' % np.bincount(y))
-    np.savetxt(fname='images.csv', 
-           X=X, delimiter=',', fmt='%d')
-    np.savetxt(fname='labels.csv', 
-           X=y, delimiter=',', fmt='%d')
+    # X, y = loadlocal_mnist(
+    #     images_path='train-images-idx3-ubyte', 
+    #     labels_path='train-labels-idx1-ubyte')
+    # #print('Dimensions: %s x %s' % (X.shape[0], X.shape[1]))
+    # #print('\n1st row', X[0])
+    # #print('Digits:  0 1 2 3 4 5 6 7 8 9')
+    # #print('labels: %s' % np.unique(y))
+    # #print('Class distribution: %s' % np.bincount(y))
+    # np.savetxt(fname='images.csv', 
+    #        X=X, delimiter=',', fmt='%d')
+    # np.savetxt(fname='labels.csv', 
+    #        X=y, delimiter=',', fmt='%d')
     X,y=obj.load_and_sort()
-    some_digit = X[36000]
-    obj.train_predict(X,y,some_digit)
+    #print(X)
+    #print(y)
+    X=X.values
+    obj.train_predict(X,y,X[36000])
