@@ -16,8 +16,6 @@ class Detector:
         # Where to save the figures
         #PROJECT_ROOT_DIR = "."
         #IMAGE_DIR = "FIXME"
-       
-        
 
     # def save_fig(self,fig_id, tight_layout=True):
     #     path = os.path.join(PROJECT_ROOT_DIR, "images", IMAGE_DIR, fig_id + ".png")
@@ -61,7 +59,7 @@ class Detector:
         mnist.target[60000:] = mnist.target[reorder_test + 60000]
 
 
-    def train_predict(self,X,y,some_digit):  
+    def train_predict(self,X,y):  
         X_train, X_test, y_train, y_test = X[:60000], X[60000:], y[:60000], y[60000:]
         shuffle_index = np.random.permutation(60000)
         X_train, y_train = X_train[shuffle_index], y_train[shuffle_index]
@@ -76,17 +74,30 @@ class Detector:
         y_train_5 = (y_train == 5)
         y_test_5 = (y_test == 5)
         
-        # print prediction result of the given input some_digit
-        #some_digit = X[36000]
+        
         from sklearn.linear_model import SGDClassifier
         from sklearn.preprocessing import StandardScaler
         from sklearn.pipeline import make_pipeline
         clf = make_pipeline(StandardScaler(),
            SGDClassifier(max_iter=1000, tol=1e-3))
         clf.fit(X_train, y_train_5)
-        print(clf.predict([some_digit]))
+
+        # cross validation
         self.calculate_cross_val_score(clf,X_train,y_train_5)
-        
+
+        # print prediction of the given input some_digit
+        some_digit = X[36000]
+        print(clf.predict([some_digit]))
+
+        # print prediction for the test dataset
+        y_pred = clf.predict(X_test)
+        # finding accuracy of the prediction
+        y_acc = (y_test_5 == y_pred)
+        y_acc_t = y_acc[y_acc == True]
+        print("Accuracy = " + len(y_acc_t)/len(y_acc))
+
+
+
         
     def calculate_cross_val_score(self,sgd_clf,X_train,y_train_5):
         from sklearn.model_selection import cross_val_score
@@ -111,4 +122,5 @@ if __name__ == "__main__":
     #print(X)
     #print(y)
     X=X.values
-    obj.train_predict(X,y,X[36000])
+    
+    obj.train_predict(X,y)
