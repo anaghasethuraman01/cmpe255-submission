@@ -94,7 +94,7 @@ class Detector:
         # finding accuracy of the prediction
         y_acc = (y_test_5 == y_pred)
         y_acc_t = y_acc[y_acc == True]
-        print("Accuracy = " + len(y_acc_t)/len(y_acc))
+        print("Accuracy = " , len(y_acc_t)/len(y_acc))
 
 
 
