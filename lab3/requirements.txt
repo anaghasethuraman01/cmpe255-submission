@@ -1,5 +1,4 @@
-kaggle-cli
+scikit-learn
+pandas
+tabulate
 numpy
-sklearn
-mlxtend
-matplotlib
